@@ -34,7 +34,7 @@ def test_script():
     subprocess.run(['chime'], check=True)
 
 
-@pytest.mark.parametrize('theme', [theme for theme in chime.themes()])
+@pytest.mark.parametrize('theme', list(chime.themes()))
 @pytest.mark.parametrize('event',
                          [lambda x: x.error(), lambda x: x.info(), lambda x: x.success(),
                           lambda x: x.warning()])
