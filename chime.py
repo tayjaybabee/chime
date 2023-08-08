@@ -45,16 +45,15 @@ def _get_default_theme(path: pathlib.Path, fallback_theme: str) -> str:
             theme.
 
     """
-    if path.exists():
-        config = configparser.ConfigParser()
-        config.read(path)
-        if "chime" in config:
-            default_theme = config["chime"].get("theme", fallback_theme)
-        else:
-            default_theme = fallback_theme
-    else:
-        default_theme = fallback_theme
-    return default_theme
+    if not path.exists():
+        return fallback_theme
+    config = configparser.ConfigParser()
+    config.read(path)
+    return (
+        config["chime"].get("theme", fallback_theme)
+        if "chime" in config
+        else fallback_theme
+    )
 
 
 def _get_default_run_args(path: pathlib.Path) -> str:
@@ -64,16 +63,11 @@ def _get_default_run_args(path: pathlib.Path) -> str:
         path: Path of the config file.
 
     """
-    if path.exists():
-        config = configparser.ConfigParser()
-        config.read(path)
-        if "chime" in config:
-            default_args = config["chime"].get("cli_args", "")
-        else:
-            default_args = ""
-    else:
-        default_args = ""
-    return default_args
+    if not path.exists():
+        return ""
+    config = configparser.ConfigParser()
+    config.read(path)
+    return config["chime"].get("cli_args", "") if "chime" in config else ""
 
 
 config_path = _get_config_path(platform.system())
